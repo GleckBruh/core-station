@@ -12,12 +12,14 @@ public static class Palettes
     public static readonly ColorPalette Navy = ColorPalette.FromHexBase("#4f5376", lightnessShift: 0.05f, chromaShift: 0.0045f);
     public static readonly ColorPalette Cyan = ColorPalette.FromHexBase("#42586a", lightnessShift: 0.05f, chromaShift: 0.0045f);
     public static readonly ColorPalette Slate = ColorPalette.FromHexBase("#545562");
-    public static readonly ColorPalette Neutral = ColorPalette.FromHexBase("#555555");
+    public static readonly ColorPalette Neutral = ColorPalette.FromHexBase("#555555", lightnessShift: 0.05f, chromaShift: 0.0045f);
+    public static readonly ColorPalette Dark = ColorPalette.FromHexBase("#2e2e2e", lightnessShift: 0.05f, chromaShift: 0.0045f);
 
     // status tones
     public static readonly ColorPalette Red = ColorPalette.FromHexBase("#b62124", chromaShift: 0.02f);
     public static readonly ColorPalette Amber = ColorPalette.FromHexBase("#c18e36");
     public static readonly ColorPalette Green = ColorPalette.FromHexBase("#3c854a");
+    public static readonly ColorPalette Blue = ColorPalette.FromHexBase("#343fa3");
     public static readonly StatusPalette Status = new([Red.Base, Amber.Base, Green.Base]);
 
     // highlight tones

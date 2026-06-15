@@ -42,7 +42,7 @@
   suffix: Salvage
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/salvage.rsi
+    sprite: Structures/Doors/Airlocks/Standard/cargo.rsi
   - type: Wires
     layoutId: AirlockCargo
 
@@ -52,7 +52,7 @@
   suffix: Hydroponics
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/hydroponics.rsi
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/hydroponics.rsi #Sunrise-Resprite
   - type: Wires
     layoutId: AirlockService
 
@@ -80,7 +80,7 @@
   suffix: Chemistry
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/chemistry.rsi
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/chemistry.rsi #Sunrise-Resprite
 
 - type: entity
   parent: Airlock
@@ -136,7 +136,7 @@
   suffix: Mining(Salvage)
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/mining.rsi
+    sprite: _Sunrise/Structures/Doors/Airlocks/Standard/salvage.rsi #Sunrise-Resprite
   - type: Wires
     layoutId: AirlockCargo
   - type: Paintable
@@ -150,18 +150,32 @@
   - type: Sprite
     sprite: Structures/Doors/Airlocks/Standard/centcomm.rsi
 
-- type: entity
-  parent: Airlock
-  id: AirlockHatch
-  name: airtight hatch
-  components:
-  - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/hatch.rsi
-  - type: Paintable
-    group: null
+# edited by Sunrise, view in _Sunrise\Entities\Structures\Doors
+#
+#- type: entity
+#  parent: Airlock
+#  id: AirlockHatch
+#  name: airtight hatch
+#  components:
+#  - type: Sprite
+#    sprite: Structures/Doors/Airlocks/Standard/hatch.rsi
+#  - type: Paintable
+#    group: null
+
+#- type: entity
+#  parent: Airlock
+#  id: AirlockHatchMaintenance
+#  name: maintenance hatch
+#  components:
+#  - type: Sprite
+#    sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
+#  - type: Paintable
+#    group: null
+#
+#end
 
 - type: entity
-  parent: Airlock
+  parent: AirlockUnlitVisibleFalse # Sunrise-edit
   id: AirlockXenoborg
   name: xenoborg airlock
   components:
@@ -171,17 +185,7 @@
     group: null
 
 - type: entity
-  parent: Airlock
-  id: AirlockHatchMaintenance
-  name: maintenance hatch
-  components:
-  - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/hatch_maint.rsi
-  - type: Paintable
-    group: null
-
-- type: entity
-  parent: Airlock
+  parent: AirlockUnlitVisibleFalse # Sunrise-edit
   id: AirlockHatchSyndicate
   name: airtight hatch
   suffix: Syndicate
@@ -232,7 +236,7 @@
   suffix: Salvage
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/salvage.rsi
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/salvage.rsi #Sunrise-Resprite
   - type: Wires
     layoutId: AirlockCargo
 
@@ -242,7 +246,7 @@
   suffix: Hydroponics
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/hydroponics.rsi
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/hydroponics.rsi #Sunrise-Resprite
   - type: Wires
     layoutId: AirlockService
 
@@ -262,7 +266,7 @@
   suffix: Chemistry
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/chemistry.rsi
+    sprite: _Sunrise/Structures/Doors/Airlocks/Glass/chemistry.rsi #Sunrise-Resprite
 
 - type: entity
   parent: AirlockMedicalGlass
@@ -339,7 +343,7 @@
     sprite: Structures/Doors/Airlocks/Glass/basic.rsi
 
 - type: entity
-  parent: Airlock
+  parent: AirlockUnlitVisibleFalse # Sunrise-edit
   id: AirlockXeno
   suffix: Xeno
   components:
@@ -349,7 +353,7 @@
     group: null
 
 - type: entity
-  parent: AirlockGlass
+  parent: AirlockUnlitVisibleFalse # Sunrise-edit
   id: AirlockGlassXeno
   suffix: Xeno
   components:

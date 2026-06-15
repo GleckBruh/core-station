@@ -1,0 +1,9 @@
+﻿- type: coreStationConfig
+  id: DevStation
+  name: station-dev-name
+  location: earth-orbit-name
+  description: station-dev-desc
+  owner: KAAF
+  preview: /Textures/CoreStation/Previews/Dev.png
+  map: CoreDev
+  gamePreset: Extended

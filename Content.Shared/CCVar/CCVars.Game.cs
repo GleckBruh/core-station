@@ -424,4 +424,11 @@ public sealed partial class CCVars
     /// </remarks>
     public static readonly CVarDef<int> TileStackLimit =
         CVarDef.Create("game.tile_stack_limit", 5, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
+    /// Core-change: add
+    ///     Master Switch for Contractors
+    /// </summary>
+    public static readonly CVarDef<bool> ContractorsEnabled =
+        CVarDef.Create("contractors.enabled", true, CVar.SERVER | CVar.REPLICATED);
 }

@@ -200,6 +200,16 @@ namespace Content.Client.Lobby.UI
                 OnSkinColorOnValueChanged();
             };
 
+            // Core-change start
+            RefreshNationalities();
+
+            NationalityButton.OnItemSelected += args =>
+            {
+                NationalityButton.SelectId(args.Id);
+                SetNationality(_nationalies[args.Id].ID);
+            };
+            // Core-change end
+
             #region Skin
 
             Skin.OnValueChanged += _ =>
@@ -386,6 +396,7 @@ namespace Content.Client.Lobby.UI
             RefreshJobs();
             RefreshLoadouts();
             RefreshSpecies();
+            RefreshNationalities(); // EE Nationalisations CorePort
             RefreshTraits();
             RefreshFlavorText();
             ReloadPreview();

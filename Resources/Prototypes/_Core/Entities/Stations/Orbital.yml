@@ -1,0 +1,14 @@
+- type: entity
+  id: Dev
+  parent:
+    - BaseStation
+    - BaseStationJobsSpawning
+    - BaseStationRecords
+    - BaseStationGateway
+    - BaseStationCentcomm
+    - BaseStationAlertLevels
+    - BaseStationNanotrasen
+    - BaseStationDeliveries
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Transform

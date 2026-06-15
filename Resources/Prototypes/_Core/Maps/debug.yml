@@ -1,0 +1,15 @@
+- type: gameMap
+  id: CoreDev
+  mapName: Dev
+  mapPath: /Maps/_Core/Test/core_dev.yml
+  minPlayers: 0
+  stations:
+    core_dev:
+      stationProto: Dev
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Dev"
+        - type: StationJobs
+          availableJobs:
+            Captain: [ -1, -1 ]
+            Passenger: [ -1, -1 ]

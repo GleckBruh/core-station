@@ -16,17 +16,19 @@
 - type: gameMap
   id: Dev
   mapName: Dev
-  mapPath: /Maps/Test/dev_map.yml
+  mapPath: /Maps/_Core/Test/core_dev.yml
   minPlayers: 0
   stations:
-    Dev:
-      stationProto: StandardNanotrasenStation
+    core_dev:
+      stationProto: Dev
       components:
-        - type: StationNameSetup
-          mapNameTemplate: "Dev"
-        - type: StationJobs
-          availableJobs:
-            Captain: [ -1, -1 ]
+      - type: StationNameSetup
+        mapNameTemplate: "Dev"
+      - type: StationJobs
+        availableJobs:
+          Captain: [ -1, -1 ]
+          Passenger: [ -1, -1 ]
+
 
 - type: gameMap
   id: TestTeg

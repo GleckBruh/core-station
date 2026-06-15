@@ -187,6 +187,8 @@ entities:
       linearDamping: 0.05
       fixedRotation: False
       bodyType: Dynamic
+    - type: Parallax
+      parallax: EarthOrbit
     - type: Fixtures
       fixtures: {}
     - type: Gravity

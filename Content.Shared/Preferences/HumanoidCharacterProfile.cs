@@ -23,6 +23,7 @@ using Robust.Shared;
 using YamlDotNet.RepresentationModel;
 using Content.Corvax.Interfaces.Shared; // Corvax-Sponsors
 
+
 namespace Content.Shared.Preferences
 {
     /// <summary>
@@ -81,6 +82,9 @@ namespace Content.Shared.Preferences
         /// </summary>
         [DataField]
         public ProtoId<SpeciesPrototype> Species { get; set; } = DefaultSpecies;
+
+        [DataField] // Core-Nationality
+        public string Nationality { get; set; } = "European";
 
         [DataField] //Corvax-TTS
         public string Voice { get; set; } = HumanoidProfileSystem.DefaultVoice;
@@ -314,6 +318,13 @@ namespace Content.Shared.Preferences
             return new(this) { Species = species };
         }
 
+        // Core-Nationality-Start
+        public HumanoidCharacterProfile WithNationality(string nationality)
+        {
+            return new(this) { Nationality = nationality };
+        }
+        // Core-Nationality-End
+
         // Corvax-TTS-Start
         public HumanoidCharacterProfile WithVoice(string voice)
         {
@@ -489,6 +500,7 @@ namespace Content.Shared.Preferences
             if (Sex != other.Sex) return false;
             if (Gender != other.Gender) return false;
             if (Species != other.Species) return false;
+            if (Nationality != other.Nationality) return false; // Core-Nationality
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
             if (SpawnPriority != other.SpawnPriority) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
@@ -767,6 +779,7 @@ namespace Content.Shared.Preferences
             hashCode.Add(Name);
             hashCode.Add(FlavorText);
             hashCode.Add(Species);
+            hashCode.Add(Nationality); // Core-Nationality
             hashCode.Add(Age);
             hashCode.Add((int)Sex);
             hashCode.Add((int)Gender);

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.UserInterface.Systems.Guidebook;
+using Content.Shared._EE.Contractors.Prototypes;
 using Content.Shared.Guidebook;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
@@ -17,6 +18,7 @@ public sealed partial class HumanoidProfileEditor
 
     private ColorSelectorSliders _rgbSkinColorSelector;
     private List<SpeciesPrototype> _species = new();
+    private List<NationalityPrototype> _nationalies = new();
     private static readonly ProtoId<GuideEntryPrototype> DefaultSpeciesGuidebook = "Species";
 
     public void UpdateSpeciesGuidebookIcon()
@@ -182,6 +184,40 @@ public sealed partial class HumanoidProfileEditor
         }
     }
 
+    // Core-change start: take _EE nationality
+    public void RefreshNationalities()
+    {
+        NationalityButton.Clear();
+        _nationalies.Clear();
+
+        _nationalies.AddRange(_prototypeManager.EnumeratePrototypes<NationalityPrototype>()
+            .Where(o => !o.Hidden || Profile?.Nationality == o.ID));
+
+        var nationalityIds = _nationalies.Select(o => o.ID).ToList();
+
+        for (var i = 0; i < _nationalies.Count; i++)
+        {
+            NationalityButton.AddItem(Loc.GetString(_nationalies[i].NameKey), i);
+
+            if (Profile?.Nationality == _nationalies[i].ID)
+                NationalityButton.SelectId(i);
+        }
+
+        // If our nationality isn't available, reset it to default
+        if (Profile != null && !nationalityIds.Contains(Profile.Nationality))
+            SetNationality("European");
+
+        if (Profile != null)
+            UpdateNationalityDescription(Profile.Nationality);
+    }
+
+    private void UpdateNationalityDescription(string nationality)
+    {
+        var prototype = _prototypeManager.Index<NationalityPrototype>(nationality);
+        NationalityDescriptionLabel.SetMessage(Loc.GetString(prototype.DescriptionKey));
+    }
+    // Core-change end
+
     private void SetSpecies(string newSpecies)
     {
         Profile = Profile?.WithSpecies(newSpecies);
@@ -196,6 +232,15 @@ public sealed partial class HumanoidProfileEditor
         UpdateSpeciesGuidebookIcon();
         ReloadPreview();
     }
+
+    // Core-change start: take _EE nationality
+    private void SetNationality(string newNationality)
+    {
+        Profile = Profile?.WithNationality(newNationality);
+        IsDirty = true;
+        ReloadProfilePreview();
+    }
+    // Core-change end
 
     private void SetAge(int newAge)
     {

@@ -26,11 +26,10 @@
   - type: Pullable
   - type: Transform
     anchored: true
-    noRot: true
+    # noRot: true # Sunrise
   - type: Damageable
-    damageModifierSet: StructuralMetallicStrong
-  - type: Injurable
     damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallicStrong
   - type: RCDDeconstructable
     cost: 6
     delay: 8
@@ -46,5 +45,6 @@
   - type: Construction
     graph: Airlock
     node: assembly
+  - type: Rotatable # Sunrise
   placement:
     mode: SnapgridCenter

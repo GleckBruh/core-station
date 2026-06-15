@@ -37,6 +37,7 @@ using Robust.Shared.Utility;
 using System.Linq;
 using Content.Shared.Chemistry.Components;
 using static Content.Shared.Configurable.ConfigurationComponent;
+#pragma warning disable CS0162 // Unreachable code detected
 
 namespace Content.Server.Administration.Systems
 {

@@ -1,0 +1,4 @@
+﻿- type: coreStationOwner
+  id: KAAF
+  name: station-owner-kaaf-name
+  widget: /Textures/CoreStation/Widgets/KAAF.png
