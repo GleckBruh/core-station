@@ -5,6 +5,10 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+// Core tweak
+using Content.Shared.ADT.CCVar;
+using Robust.Shared.Configuration;
+// Core tweak
 
 namespace Content.Server.Speech
 {
@@ -14,6 +18,7 @@ namespace Content.Server.Speech
         [Dependency] private IPrototypeManager _protoManager = default!;
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private SharedAudioSystem _audio = default!;
+        [Dependency] private IConfigurationManager _cfgManager = default!;
 
         public override void Initialize()
         {
@@ -58,6 +63,10 @@ namespace Content.Server.Speech
 
         private void OnEntitySpoke(EntityUid uid, SpeechComponent component, EntitySpokeEvent args)
         {
+            // Core Tweak for ADT Barks start
+            if (_cfgManager.GetCVar(ADTCCVars.BarksEnabled))
+                return;
+            // Core Tweak for ADT Barks end
             if (component.SpeechSounds == null)
                 return;
 

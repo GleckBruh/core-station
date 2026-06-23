@@ -1,6 +1,10 @@
 using System.Linq;
+using Content.Client._Other.ADT.Lobby.UI;
+using Content.Client.Guidebook;
+using Robust.Shared.IoC;
+using Color = Robust.Shared.Maths.Color;
 using Content.Client.UserInterface.Systems.Guidebook;
-using Content.Shared._EE.Contractors.Prototypes;
+using Content.Shared.ADT.CCVar;
 using Content.Shared.Guidebook;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
@@ -8,7 +12,6 @@ using Content.Shared.Preferences;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
-using static Content.Client.Corvax.SponsorOnlyHelpers;
 
 namespace Content.Client.Lobby.UI;
 
@@ -18,7 +21,8 @@ public sealed partial class HumanoidProfileEditor
 
     private ColorSelectorSliders _rgbSkinColorSelector;
     private List<SpeciesPrototype> _species = new();
-    private List<NationalityPrototype> _nationalies = new();
+    private SpeciesWindow? _speciesWindow;
+    [Dependency] private readonly DocumentParsingManager _parsingMan = default!;
     private static readonly ProtoId<GuideEntryPrototype> DefaultSpeciesGuidebook = "Species";
 
     public void UpdateSpeciesGuidebookIcon()
@@ -148,6 +152,64 @@ public sealed partial class HumanoidProfileEditor
     }
 
     /// <summary>
+    /// Wires the ADT species window to the new species selector button.
+    /// Call this once from the editor constructor after RobustXamlLoader.Load(this)
+    /// and after the old SpeciesButton.OnItemSelected handler, if that handler still exists.
+    /// </summary>
+    private void InitializeSpeciesWindowSelector()
+    {
+        NewSpeciesButton.OnToggled += args =>
+        {
+            if (Profile == null)
+                return;
+
+            _speciesWindow?.Dispose();
+
+            if (!args.Pressed)
+            {
+                _speciesWindow = null;
+                return;
+            }
+
+            _speciesWindow = new SpeciesWindow(
+                Profile,
+                _prototypeManager,
+                _entManager,
+                _controller,
+                _resManager,
+                _parsingMan,
+                _markingManager);
+
+            _speciesWindow.OpenCenteredLeft();
+
+            var oldProfile = Profile.Clone();
+
+            _speciesWindow.ChooseAction += speciesId =>
+            {
+                SetSpecies(speciesId);
+                OnSkinColorOnValueChangedKeepColor(oldProfile);
+
+                _speciesWindow?.Dispose();
+                _speciesWindow = null;
+
+                if (Profile != null &&
+                    _prototypeManager.TryIndex<SpeciesPrototype>(Profile.Species, out var speciesProto))
+                {
+                    NewSpeciesButton.Text = Loc.GetString(speciesProto.Name);
+                }
+
+                NewSpeciesButton.Pressed = false;
+            };
+
+            _speciesWindow.OnClose += () =>
+            {
+                NewSpeciesButton.Pressed = false;
+                _speciesWindow = null;
+            };
+        };
+    }
+
+    /// <summary>
     /// Refreshes the species selector.
     /// </summary>
     public void RefreshSpecies()
@@ -163,14 +225,16 @@ public sealed partial class HumanoidProfileEditor
         {
             var name = Loc.GetString(_species[i].Name);
 
-            if (_species[i].SponsorOnly) // Corvax-Sponsors
-                name += GetSponsorOnlySuffix();
-
             SpeciesButton.AddItem(name, i);
 
             if (Profile?.Species.Equals(_species[i].ID) == true)
             {
                 SpeciesButton.SelectId(i);
+
+                NewSpeciesButton.Text = name;
+                NewSpeciesButton.Pressed = false;
+                _speciesWindow?.Dispose();
+                _speciesWindow = null;
             }
         }
 
@@ -183,40 +247,6 @@ public sealed partial class HumanoidProfileEditor
             }
         }
     }
-
-    // Core-change start: take _EE nationality
-    public void RefreshNationalities()
-    {
-        NationalityButton.Clear();
-        _nationalies.Clear();
-
-        _nationalies.AddRange(_prototypeManager.EnumeratePrototypes<NationalityPrototype>()
-            .Where(o => !o.Hidden || Profile?.Nationality == o.ID));
-
-        var nationalityIds = _nationalies.Select(o => o.ID).ToList();
-
-        for (var i = 0; i < _nationalies.Count; i++)
-        {
-            NationalityButton.AddItem(Loc.GetString(_nationalies[i].NameKey), i);
-
-            if (Profile?.Nationality == _nationalies[i].ID)
-                NationalityButton.SelectId(i);
-        }
-
-        // If our nationality isn't available, reset it to default
-        if (Profile != null && !nationalityIds.Contains(Profile.Nationality))
-            SetNationality("European");
-
-        if (Profile != null)
-            UpdateNationalityDescription(Profile.Nationality);
-    }
-
-    private void UpdateNationalityDescription(string nationality)
-    {
-        var prototype = _prototypeManager.Index<NationalityPrototype>(nationality);
-        NationalityDescriptionLabel.SetMessage(Loc.GetString(prototype.DescriptionKey));
-    }
-    // Core-change end
 
     private void SetSpecies(string newSpecies)
     {
@@ -232,15 +262,6 @@ public sealed partial class HumanoidProfileEditor
         UpdateSpeciesGuidebookIcon();
         ReloadPreview();
     }
-
-    // Core-change start: take _EE nationality
-    private void SetNationality(string newNationality)
-    {
-        Profile = Profile?.WithNationality(newNationality);
-        IsDirty = true;
-        ReloadProfilePreview();
-    }
-    // Core-change end
 
     private void SetAge(int newAge)
     {
@@ -270,6 +291,9 @@ public sealed partial class HumanoidProfileEditor
         _markingsModel.SetOrganSexes(newSex);
         ReloadPreview();
     }
+
+
+
 
     private void SetGender(Gender newGender)
     {
@@ -347,4 +371,117 @@ public sealed partial class HumanoidProfileEditor
 
         ReloadProfilePreview();
     }
+    // ADT Species Window start
+    private void OnSkinColorOnValueChangedKeepColor(HumanoidCharacterProfile previous)
+    {
+        if (Profile is null)
+            return;
+
+        var skinTypeStr = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
+        var color = previous.Appearance.SkinColor;
+
+        switch (skinTypeStr)
+        {
+            case "HumanToned":
+                // Keep previous skin color.
+                break;
+
+            case "Hues":
+                color = AdjustBrightness(color, 0.9f, 1.0f);
+                break;
+
+            case "TintedHues":
+                color = AdjustSaturation(color, 0.1f);
+                break;
+
+            case "VoxFeathers":
+                color = ClampColor(color, 29f / 360f, 174f / 360f, 0.2f, 0.88f, 0.36f, 0.55f);
+                break;
+
+            default:
+                // Unknown skin color strategy: keep previous color.
+                break;
+        }
+
+        _rgbSkinColorSelector.Color = color;
+        ReloadProfilePreview();
+    }
+
+    private Color AdjustBrightness(Color color, float min, float max)
+    {
+        var hsv = Color.ToHsv(color);
+        hsv.Z = Math.Clamp(hsv.Z, min, max);
+        return Color.FromHsv(hsv);
+    }
+
+    private Color AdjustSaturation(Color color, float maxSaturation)
+    {
+        var hsv = Color.ToHsv(color);
+        hsv.Y = Math.Min(hsv.Y, maxSaturation);
+        return Color.FromHsv(hsv);
+    }
+
+    private Color ClampColor(Color color, float minH, float maxH, float minS, float maxS, float minV, float maxV)
+    {
+        var hsv = Color.ToHsv(color);
+        hsv.X = Math.Clamp(hsv.X, minH, maxH);
+        hsv.Y = Math.Clamp(hsv.Y, minS, maxS);
+        hsv.Z = Math.Clamp(hsv.Z, minV, maxV);
+        return Color.FromHsv(hsv);
+    }
+    // ADT Species Window end
+    // ADT Barks start
+    private void SetBarkProto(string prototype)
+    {
+        if (Profile is null)
+            return;
+
+        Profile = Profile.WithBarkProto(prototype);
+        ReloadPreview();
+        SetDirty();
+    }
+
+    private void SetBarkPitch(float pitch)
+    {
+        if (Profile is null)
+            return;
+
+        Profile = Profile.WithBarkPitch(Math.Clamp(
+            pitch,
+            _cfgManager.GetCVar(ADTCCVars.BarksMinPitch),
+            _cfgManager.GetCVar(ADTCCVars.BarksMaxPitch)));
+
+        ReloadPreview();
+        SetDirty();
+    }
+
+    private void SetBarkMinVariation(float variation)
+    {
+        if (Profile is null)
+            return;
+
+        Profile = Profile.WithBarkMinVariation(Math.Clamp(
+            variation,
+            _cfgManager.GetCVar(ADTCCVars.BarksMinDelay),
+            Profile.Bark.MaxVar));
+
+        ReloadPreview();
+        SetDirty();
+    }
+
+    private void SetBarkMaxVariation(float variation)
+    {
+        if (Profile is null)
+            return;
+
+        Profile = Profile.WithBarkMaxVariation(Math.Clamp(
+            variation,
+            Profile.Bark.MinVar,
+            _cfgManager.GetCVar(ADTCCVars.BarksMaxDelay)));
+
+        ReloadPreview();
+        SetDirty();
+    }
+    // ADT Barks end
+
 }

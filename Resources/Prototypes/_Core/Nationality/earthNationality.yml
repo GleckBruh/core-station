@@ -1,5 +1,0 @@
-- type: nationality
-  id: European
-  name: nationality_name_european
-  description: nationality_description_european
-  passportPrototype: EuropeanPassport

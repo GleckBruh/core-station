@@ -158,6 +158,9 @@
     - FootstepSound
     - DoorBumpOpener
     - AnomalyHost
+  # ADT-Core tweak start
+  - type: SpeechBarks
+  # ADT-Core tweak end
 
 - type: entity
   abstract: true

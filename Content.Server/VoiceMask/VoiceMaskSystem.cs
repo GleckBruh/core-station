@@ -78,6 +78,7 @@ public sealed partial class VoiceMaskSystem : EntitySystem
 
         Subs.CVar(_cfgManager, CCVars.MaxNameLength, value => _maxNameLength = value, true);
         InitializeTTS(); // Corvax-TTS
+        InitializeBarks(); // ADT Barks
     }
 
     private void OnMapInit(Entity<VoiceMaskComponent> ent, ref MapInitEvent args)
@@ -273,7 +274,7 @@ public sealed partial class VoiceMaskSystem : EntitySystem
     private void UpdateUI(Entity<VoiceMaskComponent> entity)
     {
         if (_uiSystem.HasUi(entity, VoiceMaskUIKey.Key))
-            _uiSystem.SetUiState(entity.Owner, VoiceMaskUIKey.Key, new VoiceMaskBuiState(GetCurrentVoiceName(entity), entity.Comp.VoiceMaskSpeechVerb, entity.Comp.Active, entity.Comp.AccentHide, entity.Comp.TitleText, entity.Comp.VoiceId)); //entity.Comp.VoiceId Corvax-TTS
+            _uiSystem.SetUiState(entity.Owner, VoiceMaskUIKey.Key, new VoiceMaskBuiState(GetCurrentVoiceName(entity), entity.Comp.VoiceMaskSpeechVerb, entity.Comp.Active, entity.Comp.AccentHide, entity.Comp.TitleText, entity.Comp.VoiceId, entity.Comp.BarkId, entity.Comp.BarkPitch)); //entity.Comp.VoiceId Corvax-TTS
     }
     #endregion
 

@@ -2,6 +2,7 @@ using Content.Shared.Body;
 using Content.Shared.Dataset;
 using Content.Shared.Humanoid.Markings;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Humanoid.Prototypes;
@@ -35,13 +36,35 @@ public sealed partial class SpeciesPrototype : IPrototype
     [DataField(required: true)]
     public bool RoundStart { get; private set; } = false;
 
-    // Corvax-Sponsors-Start
     /// <summary>
-    /// Whether the species is available only for sponsors
+    /// Category used by the character editor species selection window.
     /// </summary>
     [DataField]
-    public bool SponsorOnly { get; private set; } = false;
-    // Corvax-Sponsors-End
+    public SpeciesCategory Category { get; private set; } = SpeciesCategory.Classic;
+
+    /// <summary>
+    /// Localization IDs for positive species traits shown in the species selection window.
+    /// </summary>
+    [DataField]
+    public List<string> Pros { get; private set; } = new();
+
+    /// <summary>
+    /// Localization IDs for special/neutral species traits shown in the species selection window.
+    /// </summary>
+    [DataField]
+    public List<string> Special { get; private set; } = new();
+
+    /// <summary>
+    /// Localization IDs for negative species traits shown in the species selection window.
+    /// </summary>
+    [DataField]
+    public List<string> Cons { get; private set; } = new();
+
+    /// <summary>
+    /// Optional guidebook-style XML file displayed in the species selection window.
+    /// </summary>
+    [DataField]
+    public ResPath? Description { get; private set; }
 
     /// <summary>
     ///     Default skin tone for this species. This applies for non-human skin tones.
@@ -126,4 +149,12 @@ public enum SpeciesNaming : byte
     FirstLast,
     FirstDashFirst,
     TheFirstofLast,
+}
+
+
+public enum SpeciesCategory : byte
+{
+    Classic,
+    Unusual,
+    Special,
 }

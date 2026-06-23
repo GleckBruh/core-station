@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Content.Shared.CCVar;
 using Content.Shared.Corvax.TTS;
+using Content.Shared.ADT.SpeechBarks;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
@@ -83,9 +84,6 @@ namespace Content.Shared.Preferences
         [DataField]
         public ProtoId<SpeciesPrototype> Species { get; set; } = DefaultSpecies;
 
-        [DataField] // Core-Nationality
-        public string Nationality { get; set; } = "European";
-
         [DataField] //Corvax-TTS
         public string Voice { get; set; } = HumanoidProfileSystem.DefaultVoice;
 
@@ -109,6 +107,11 @@ namespace Content.Shared.Preferences
         /// </summary>
         [DataField]
         public SpawnPriorityPreference SpawnPriority { get; private set; } = SpawnPriorityPreference.None;
+
+        // ADT Barks start
+        [DataField]
+        public BarkData Bark = new();
+        // ADT Barks end
 
         /// <summary>
         /// <see cref="_jobPriorities"/>
@@ -195,6 +198,7 @@ namespace Content.Shared.Preferences
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
                 new Dictionary<string, RoleLoadout>(other.Loadouts))
         {
+            Bark = other.Bark;
         }
 
         /// <summary>
@@ -318,19 +322,46 @@ namespace Content.Shared.Preferences
             return new(this) { Species = species };
         }
 
-        // Core-Nationality-Start
-        public HumanoidCharacterProfile WithNationality(string nationality)
-        {
-            return new(this) { Nationality = nationality };
-        }
-        // Core-Nationality-End
-
         // Corvax-TTS-Start
         public HumanoidCharacterProfile WithVoice(string voice)
         {
             return new(this) { Voice = voice };
         }
         // Corvax-TTS-End
+
+        // ADT Barks start
+        public HumanoidCharacterProfile WithBarkProto(string bark)
+        {
+            return new(this)
+            {
+                Bark = Bark.WithProto(bark),
+            };
+        }
+
+        public HumanoidCharacterProfile WithBarkPitch(float pitch)
+        {
+            return new(this)
+            {
+                Bark = Bark.WithPitch(pitch),
+            };
+        }
+
+        public HumanoidCharacterProfile WithBarkMinVariation(float variation)
+        {
+            return new(this)
+            {
+                Bark = Bark.WithMinVar(variation),
+            };
+        }
+
+        public HumanoidCharacterProfile WithBarkMaxVariation(float variation)
+        {
+            return new(this)
+            {
+                Bark = Bark.WithMaxVar(variation),
+            };
+        }
+        // ADT Barks end
 
         public HumanoidCharacterProfile WithCharacterAppearance(HumanoidCharacterAppearance appearance)
         {
@@ -500,7 +531,6 @@ namespace Content.Shared.Preferences
             if (Sex != other.Sex) return false;
             if (Gender != other.Gender) return false;
             if (Species != other.Species) return false;
-            if (Nationality != other.Nationality) return false; // Core-Nationality
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
             if (SpawnPriority != other.SpawnPriority) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
@@ -508,6 +538,7 @@ namespace Content.Shared.Preferences
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
             if (FlavorText != other.FlavorText) return false;
+            if (!Bark.MemberwiseEquals(other.Bark)) return false;
             return Appearance.Equals(other.Appearance);
         }
 
@@ -521,14 +552,6 @@ namespace Content.Shared.Preferences
                 Species = HumanoidCharacterProfile.DefaultSpecies;
                 speciesPrototype = prototypeManager.Index(Species);
             }
-
-            // Corvax-Sponsors-Start: Reset to human if player not sponsor
-            if (speciesPrototype.SponsorOnly && !sponsorPrototypes.Contains(Species.Id))
-            {
-                Species = HumanoidCharacterProfile.DefaultSpecies;
-                speciesPrototype = prototypeManager.Index(Species);
-            }
-            // Corvax-Sponsors-End
 
             var sex = Sex switch
             {
@@ -778,8 +801,8 @@ namespace Content.Shared.Preferences
             hashCode.Add(_loadouts);
             hashCode.Add(Name);
             hashCode.Add(FlavorText);
+            hashCode.Add(Bark);
             hashCode.Add(Species);
-            hashCode.Add(Nationality); // Core-Nationality
             hashCode.Add(Age);
             hashCode.Add((int)Sex);
             hashCode.Add((int)Gender);

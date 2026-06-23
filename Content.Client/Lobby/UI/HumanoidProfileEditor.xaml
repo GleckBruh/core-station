@@ -59,19 +59,10 @@
                                     <Control HorizontalExpand="True"/>
                                     <TextureButton Name="SpeciesInfoButton" Scale="0.3 0.3"
                                                    VerticalAlignment="Center"
-                                                   ToolTip="{Loc 'humanoid-profile-editor-guidebook-button-tooltip'}"/>
-                                    <OptionButton Name="SpeciesButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
-                                <!-- _EE: Nationality -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-nationality-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <TextureButton Name="NationalityInfoButton" Scale="0.3 0.3" VerticalAlignment="Center"
-                                                   ToolTip="{Loc 'humanoid-profile-editor-guidebook-button-tooltip'}"/>
-                                    <OptionButton Name="NationalityButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
-                                <BoxContainer HorizontalExpand="False">
-                                    <RichTextLabel Name="NationalityDescriptionLabel" Text="" HorizontalExpand="False" MaxWidth="600"/>
+                                                   ToolTip="{Loc 'humanoid-profile-editor-guidebook-button-tooltip'}"
+                                                   Visible="False"/>    <!-- ADT tweak: Установил Visible="False" -->
+                                    <OptionButton Name="SpeciesButton" HorizontalAlignment="Right" Visible="False"/>    <!-- ADT tweak: Установил Visible="False" -->
+                                    <Button Name="NewSpeciesButton" HorizontalAlignment="Right" ToggleMode="True" />    <!-- ADT tweak: Новая кнопка. -->
                                 </BoxContainer>
                                 <!-- Age -->
                                 <BoxContainer HorizontalExpand="True">
@@ -103,6 +94,14 @@
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SpawnPriorityButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <!-- ADT Barks Start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False" Name="BarksContainer">
+                                    <Label Text="{Loc 'humanoid-profile-editor-bark-label'}" />
+                                    <Control HorizontalExpand="True"/>
+                                    <Button Name="BarkProtoButton" HorizontalAlignment="Right" MinWidth="150" />
+                                    <Button Name="BarkPlayButton" Text="{Loc 'humanoid-profile-editor-voice-play'}" MaxWidth="80" />
+                                </BoxContainer>
+                                <!-- ADT Barks End -->
                             </BoxContainer>
                             <!-- Skin -->
                             <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical">

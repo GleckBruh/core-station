@@ -10,3 +10,21 @@
   femaleFirstNames: NamesMothFirstFemale
   maleLastNames: NamesMothLast # Corvax-LastnameGender
   femaleLastNames: NamesMothLast # Corvax-LastnameGender
+  # Core
+  shortDesc: species-short-desc-moth
+  description: "/ServerInfo/ADT/SpeciesDescriptions/Nian.xml"
+  pros:
+  - Могут быстро и манёвренно перемещаться без гравитации.
+  - Получают на 10% меньше урона ушибами.
+  - Получают на 30% меньше урона холодом.
+  special:
+  - Могут есть ткань.
+  - Могут совершать "рывок" перелетая вплоть до 5 тайлов.
+  cons:
+  - Не могут переваривать мясную пищу.
+  - Получают повышенный урон во время горения в 3 раза по сравнению с человеком
+  - Получают на 10% больше урона уколами.
+  - Получают на 10% больше урона порезами.
+  - Получают на 35% больше урона ожогами.
+  - Получают на 50% больше урона ядом.
+  # Core

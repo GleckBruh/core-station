@@ -78,6 +78,16 @@ public sealed partial class VoiceMaskComponent : Component
     [DataField]
     public bool IsInnate = false;
 
+    // ADT Barks start
+    [DataField]
+    [ViewVariables(VVAccess.ReadWrite)]
+    public string BarkId = "Human1";
+
+    [DataField]
+    [ViewVariables(VVAccess.ReadWrite)]
+    public float BarkPitch = 1f;
+    // ADT Barks end
+
     /// <summary>
     ///     Is used as the title text in the UI.
     /// </summary>

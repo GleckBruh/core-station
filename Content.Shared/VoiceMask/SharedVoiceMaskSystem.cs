@@ -1,4 +1,5 @@
 using Content.Shared.Inventory;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.VoiceMask;
@@ -18,8 +19,18 @@ public sealed class VoiceMaskBuiState : BoundUserInterfaceState
     public readonly bool AccentHide;
     public readonly LocId TitleText;
     public readonly string Voice; // Corvax-TTS
+    public readonly string Bark; // ADT Barks
+    public readonly float Pitch; // ADT Barks
 
-    public VoiceMaskBuiState(string name, string? verb, bool active, bool accentHide, LocId titleText, string voice) // Corvax-TTS
+    public VoiceMaskBuiState(
+        string name,
+        string? verb,
+        bool active,
+        bool accentHide,
+        LocId titleText,
+        string voice, // Corvax-TTS
+        string bark, // Core-ADT-Bark
+        float pitch) // Core-ADT-Bark
     {
         Name = name;
         Verb = verb;
@@ -27,6 +38,8 @@ public sealed class VoiceMaskBuiState : BoundUserInterfaceState
         AccentHide = accentHide;
         TitleText = titleText;
         Voice = voice;  // Corvax-TTS
+        Bark = bark; // ADT Barks
+        Pitch = pitch; // ADT Barks
     }
 }
 
@@ -70,14 +83,14 @@ public sealed class VoiceMaskAccentToggleMessage : BoundUserInterfaceMessage;
 /// <summary>
 ///  Fired when a voice mask is turned on.
 /// </summary>
-/// <param name=="Mask">The voice mask that was turned on</param> 
-/// <param name=="Source">The entity that owns the voice mask</param> 
-/// <param name=="Active">The new value of the voice mask</param> 
+/// <param name=="Mask">The voice mask that was turned on</param>
+/// <param name=="Source">The entity that owns the voice mask</param>
+/// <param name=="Active">The new value of the voice mask</param>
 public sealed class VoiceMaskToggledEvent(EntityUid mask, EntityUid source, bool active) : IInventoryRelayEvent
 {
     public EntityUid Mask = mask;
     public EntityUid Source = source;
-    
+
     public bool Active = active;
 
     SlotFlags IInventoryRelayEvent.TargetSlots => SlotFlags.WITHOUT_POCKET;

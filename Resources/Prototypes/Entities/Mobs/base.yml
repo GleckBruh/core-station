@@ -54,6 +54,8 @@
   - type: MobMover
   - type: MovementSpeedModifier
   - type: LagCompensation
+  - type: Sprinter
+    staminaDrainRate: 3.5
 
 - type: entity
   save: false

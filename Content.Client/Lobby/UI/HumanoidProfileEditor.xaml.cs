@@ -2,6 +2,7 @@ using Content.Client.Humanoid;
 using Content.Client.Message;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Client.Sprite;
+using Content.Shared.ADT.CCVar;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
@@ -191,6 +192,18 @@ namespace Content.Client.Lobby.UI
 
             #endregion Gender
 
+            // ADT Barks start
+            if (_cfgManager.GetCVar(ADTCCVars.BarksEnabled))
+            {
+                BarksContainer.Visible = true;
+                InitializeBarks();
+            }
+            else
+            {
+                BarksContainer.Visible = false;
+            }
+            // ADT Barks end
+
             RefreshSpecies();
 
             SpeciesButton.OnItemSelected += args =>
@@ -200,15 +213,7 @@ namespace Content.Client.Lobby.UI
                 OnSkinColorOnValueChanged();
             };
 
-            // Core-change start
-            RefreshNationalities();
-
-            NationalityButton.OnItemSelected += args =>
-            {
-                NationalityButton.SelectId(args.Id);
-                SetNationality(_nationalies[args.Id].ID);
-            };
-            // Core-change end
+            InitializeSpeciesWindowSelector();
 
             #region Skin
 
@@ -391,12 +396,12 @@ namespace Content.Client.Lobby.UI
             UpdateSaveButton();
             UpdateMarkings();
             UpdateTTSVoicesControls(); // Corvax-TTS
+            UpdateBarkVoicesControls(); // ADT Barks
 
             RefreshAntags();
             RefreshJobs();
             RefreshLoadouts();
             RefreshSpecies();
-            RefreshNationalities(); // EE Nationalisations CorePort
             RefreshTraits();
             RefreshFlavorText();
             ReloadPreview();
