@@ -1,0 +1,101 @@
+﻿#- type: entity
+#  name: Сепаратист А
+#  suffix: ИИ
+#  parent: BaseMobHuman
+#  id: RdsMobAISeparA
+#  components:
+#      - type: NpcFactionMember
+#        factions:
+#            - Syndicate
+#      - type: Loadout
+#        prototypes:
+#            - SeparA
+#      - type: InputMover
+#      - type: MobMover
+#      - type: HTN
+#        rootTask:
+#          task: SimpleHumanoidHostileCompound
+#      - type: PartialAbsorbable # Goobstation - changelings
+#
+#- type: entity
+#  name: Сепаратист B
+#  suffix: ИИ
+#  parent: BaseMobHuman
+#  id: RdsMobAISeparB
+#  components:
+#  - type: NpcFactionMember
+#    factions:
+#    - Syndicate
+#  - type: Loadout
+#    prototypes:
+#    - SeparB
+#  - type: InputMover
+#  - type: MobMover
+#  - type: HTN
+#    rootTask:
+#      task: SimpleHumanoidHostileCompound
+#  - type: PartialAbsorbable # Goobstation - changelings
+#
+#- type: entity
+#  name: Сепаратист C
+#  suffix: ИИ
+#  parent: BaseMobHuman
+#  id: RdsMobAISeparC
+#  components:
+#  - type: NpcFactionMember
+#    factions:
+#    - Syndicate
+#  - type: Loadout
+#    prototypes:
+#    - SeparC
+#  - type: InputMover
+#  - type: MobMover
+#  - type: HTN
+#    rootTask:
+#      task: SimpleHumanoidHostileCompound
+#  - type: PartialAbsorbable # Goobstation - changelings
+#
+#- type: entity
+#  name: Сепаратист А
+#  parent: BaseMobHuman
+#  id: RdsMobSeparA
+#  components:
+#  - type: NpcFactionMember
+#    factions:
+#    - Syndicate
+#  - type: Loadout
+#    prototypes:
+#    - SeparA
+#  - type: InputMover
+#  - type: MobMover
+#  - type: PartialAbsorbable # Goobstation - changelings
+#
+#- type: entity
+#  name: Сепаратист B
+#  parent: BaseMobHuman
+#  id: RdsMobSeparB
+#  components:
+#  - type: NpcFactionMember
+#    factions:
+#    - Syndicate
+#  - type: Loadout
+#    prototypes:
+#    - SeparB
+#  - type: InputMover
+#  - type: MobMover
+#  - type: PartialAbsorbable # Goobstation - changelings
+#
+#- type: entity
+#  name: Сепаратист C
+#  parent: BaseMobHuman
+#  id: RdsMobSeparC
+#  components:
+#  - type: NpcFactionMember
+#    factions:
+#    - Syndicate
+#  - type: Loadout
+#    prototypes:
+#    - SeparC
+#  - type: InputMover
+#  - type: MobMover
+#  - type: PartialAbsorbable # Goobstation - changelings

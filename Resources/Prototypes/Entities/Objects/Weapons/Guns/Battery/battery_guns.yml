@@ -866,6 +866,8 @@
   - type: BatteryAmmoProvider
     proto: BulletLaserSpreadNarrow
     fireCost: 80
+  - type: BatterySelfRecharger
+    autoRechargeRate: 20
   - type: BatteryWeaponFireModes
     fireModes:
     - proto: BulletLaserSpreadNarrow

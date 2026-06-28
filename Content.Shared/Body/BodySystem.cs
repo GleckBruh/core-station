@@ -16,6 +16,24 @@ namespace Content.Shared.Body;
 /// <seealso cref="BodyRelayedEvent{TEvent}" />
 public sealed partial class BodySystem : EntitySystem
 {
+    /// <summary>
+    /// Container ID prefix for child body-part slots.
+    /// Imported for Sunrise/Starlight surgery compatibility.
+    /// </summary>
+    public const string PartSlotContainerIdPrefix = "body_part_slot_";
+
+    /// <summary>
+    /// Compatibility root container id used by Sunrise body-part code.
+    /// Your current body system still uses <see cref="BodyComponent.ContainerID"/> for normal organs.
+    /// </summary>
+    public const string BodyRootContainerId = "body_root_part";
+
+    /// <summary>
+    /// Container ID prefix for organ slots inside body parts.
+    /// Imported for Sunrise/Starlight surgery compatibility.
+    /// </summary>
+    public const string OrganSlotContainerIdPrefix = "body_organ_slot_";
+
     [Dependency] private SharedContainerSystem _container = default!;
 
     [Dependency] private EntityQuery<BodyComponent> _bodyQuery = default!;
@@ -33,7 +51,37 @@ public sealed partial class BodySystem : EntitySystem
         SubscribeLocalEvent<BodyComponent, EntInsertedIntoContainerMessage>(OnBodyEntInserted);
         SubscribeLocalEvent<BodyComponent, EntRemovedFromContainerMessage>(OnBodyEntRemoved);
 
+        InitializeParts();
         InitializeRelay();
+    }
+
+    /// <summary>
+    /// Inverse of <see cref="GetPartSlotContainerId"/>.
+    /// </summary>
+    protected static string? GetPartSlotContainerIdFromContainer(string containerSlotId)
+    {
+        var slotIndex = containerSlotId.IndexOf(PartSlotContainerIdPrefix, StringComparison.Ordinal);
+
+        if (slotIndex < 0)
+            return null;
+
+        return containerSlotId.Remove(slotIndex, PartSlotContainerIdPrefix.Length);
+    }
+
+    /// <summary>
+    /// Gets the container id for a child body-part slot.
+    /// </summary>
+    public static string GetPartSlotContainerId(string slotId)
+    {
+        return PartSlotContainerIdPrefix + slotId;
+    }
+
+    /// <summary>
+    /// Gets the container id for an organ slot inside a body part.
+    /// </summary>
+    public static string GetOrganContainerId(string slotId)
+    {
+        return OrganSlotContainerIdPrefix + slotId;
     }
 
     private void OnBodyInit(Entity<BodyComponent> ent, ref ComponentInit args)

@@ -96,6 +96,8 @@
     price: 40
   - type: IgnitionSource
     temperature: 700
+  - type: DarknessProtectionSource
+    radius: 0.6
 
 - type: entity
   parent: [SolutionToolWelder, BaseWelder]
@@ -208,6 +210,8 @@
     enabled: false
     radius: 1.0
     color: orange
+  - type: DarknessProtectionSource #RedShooter - 0.5 = недостаточно света для защиты.
+    radius: 0.5
 
 - type: entity
   parent: [SolutionWelder, SolutionTiny]

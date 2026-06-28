@@ -74,6 +74,8 @@
     quickEquip: false
     slots:
       - Belt
+  - type: DarknessProtectionSource # RedShooter TODO: направленый свет в тьме
+    radius: 2
 
 - type: entity
   name: seclite

@@ -132,6 +132,8 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: Puller
   - type: Speech
     speechSounds: Alto
@@ -232,3 +234,27 @@
   - type: FireVisuals
     alternateState: Standing
   - type: StunVisuals
+  - type: DarknessVulnerable # RedShooter - Мрак
+    maxExposure: 100
+    exposureGainPerSecond: 8
+    exposureDecayPerSecond: 12
+
+    lightDamageThreshold: 20
+    mediumDamageThreshold: 50
+    heavyDamageThreshold: 80
+
+    lightDamageInterval: 2
+    mediumDamageInterval: 1.5
+    heavyDamageInterval: 1
+
+    lightDamage:
+      types:
+        Heat: 3
+
+    mediumDamage:
+      types:
+        Heat: 6
+
+    heavyDamage:
+      types:
+        Heat: 10

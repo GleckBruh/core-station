@@ -1,0 +1,13 @@
+﻿- type: job
+  id: GuardOfficerSCO
+  name: Офицер ССО
+  description: Опытный боец Отдела Специальных Скрытых Операций
+  playTimeTracker: JobSCOGuard
+  weight: 20
+  startingGear: CaptainGear
+  icon: "JobIconCaptain"
+  joinNotifyCrew: false
+  canBeAntag: false
+  accessGroups:
+  - AllAccess
+  - Guard

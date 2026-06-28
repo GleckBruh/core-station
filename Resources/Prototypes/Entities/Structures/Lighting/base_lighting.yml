@@ -159,6 +159,8 @@
       types:
         Heat: 2
     popupText: powered-light-component-burn-hand
+  - type: DarknessProtectionSource # RedShooter - Мрак
+    radius: 6.6
 
 #LED lights
 - type: entity
@@ -354,6 +356,8 @@
       types:
         Heat: 2
     popupText: powered-light-component-burn-hand
+  - type: DarknessProtectionSource
+    radius: 5
 
 - type: entity
   id: PoweredLEDSmallLight
@@ -396,6 +400,8 @@
       types:
         Heat: 1
     popupText: powered-light-component-burn-hand
+  - type: DarknessProtectionSource
+    radius: 2.5
 
 - type: entity
   id: PoweredWarmSmallLight

@@ -166,6 +166,7 @@
   - type: HideLayerClothing
     slots:
     - Tail
+  - type: DarknessProtectionEquipment # RedShooter - защита от Мрака
 
 - type: entity
   abstract: true
@@ -198,6 +199,7 @@
   - type: HideLayerClothing
     slots:
     - Tail
+  - type: DarknessProtectionEquipment # RedShooter - защита от Мрака
 
 - type: entity
   parent: ClothingOuterBase

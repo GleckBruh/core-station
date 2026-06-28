@@ -79,3 +79,5 @@
     - type: Tag
       tags:
       - Torch
+    - type: DarknessProtectionSource #RedShooter
+      radius: 5

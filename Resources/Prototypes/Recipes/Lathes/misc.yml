@@ -61,6 +61,7 @@
   materials:
     Plastic: 50
 
+
 - type: latheRecipe
   parent: GlowstickRed
   id: Flare

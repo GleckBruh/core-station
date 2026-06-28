@@ -1,0 +1,29 @@
+﻿- type: entity
+  id: MarkerDarknessSuppressor
+  name: darkness suppressor marker
+  description: Removes Murk influence in radius.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    state: pink
+  - type: DarknessSuppressor
+    radius: 25
+
+- type: entity
+  id: MarkerDarknessZone
+  name: darkness zone marker
+  description: Creates Murk influence in radius.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    state: red
+  - type: DarknessZone
+    radius: 10

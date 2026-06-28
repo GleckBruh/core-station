@@ -124,6 +124,8 @@
     proto: robot
   - type: Speech
     speechVerb: Robotic
+  - type: DarknessProtectionSource # RedShooter - Мрак
+    radius: 1
 
 - type: entity
   parent: BasePDA

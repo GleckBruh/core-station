@@ -46,6 +46,8 @@
     temperature: 700
     ignited: true
   - type: RequireProjectileTarget
+  - type: DarknessProtectionSource # RedShooter - Мрак
+    radius: 5
 
 - type: entity
   parent: BaseBonfire

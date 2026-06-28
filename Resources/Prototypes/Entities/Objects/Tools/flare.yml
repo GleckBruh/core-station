@@ -94,3 +94,5 @@
         Quantity: 4
       - ReagentId: Sulfur
         Quantity: 4
+  - type: DarknessProtectionSource # RedShooter - Мрак
+    radius: 8.8

@@ -30,6 +30,27 @@
   components:
   - type: Organ
     category: Torso
+  - type: BaseLayerId
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+    partType: Torso
+  - type: ContainerContainer
+    containers:
+      'body_part_slot_head': !type:Container
+        ents: []
+      'body_part_slot_left arm': !type:Container
+        ents: []
+      'body_part_slot_right arm': !type:Container
+        ents: []
+      'body_part_slot_left leg': !type:Container
+        ents: []
+      'body_part_slot_right leg': !type:Container
+        ents: []
+  - type: UserInterface # Core surgency
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: Sprite
     state: torso
   - type: VisualOrgan
@@ -55,6 +76,16 @@
   components:
   - type: Organ
     category: Head
+  - type: BaseLayerId
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+    partType: Head
+    vital: true
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: Sprite
     state: head
   - type: VisualOrgan
@@ -82,6 +113,20 @@
   components:
   - type: Organ
     category: ArmLeft
+  - type: BaseLayerId
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+    partType: Arm
+    symmetry: Left
+  - type: ContainerContainer
+    containers:
+      'body_part_slot_left hand': !type:Container
+        ents: []
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: Sprite
     state: l_arm
   - type: VisualOrgan
@@ -101,6 +146,20 @@
   components:
   - type: Organ
     category: ArmRight
+  - type: BaseLayerId
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+    partType: Arm
+    symmetry: Right
+  - type: ContainerContainer
+    containers:
+      'body_part_slot_right hand': !type:Container
+        ents: []
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: Sprite
     state: r_arm
   - type: VisualOrgan
@@ -120,6 +179,16 @@
   components:
   - type: Organ
     category: HandLeft
+  - type: BaseLayerId
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+    partType: Hand
+    symmetry: Left
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: HandOrgan
     handID: left
     data:
@@ -143,6 +212,16 @@
   components:
   - type: Organ
     category: HandRight
+  - type: BaseLayerId
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+    partType: Hand
+    symmetry: Right
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: HandOrgan
     handID: right
     data:
@@ -166,6 +245,20 @@
   components:
   - type: Organ
     category: LegLeft
+  - type: BaseLayerId
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+    partType: Leg
+    symmetry: Left
+  - type: ContainerContainer
+    containers:
+      'body_part_slot_left foot': !type:Container
+        ents: []
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: Sprite
     state: l_leg
   - type: VisualOrgan
@@ -185,6 +278,20 @@
   components:
   - type: Organ
     category: LegRight
+  - type: BaseLayerId
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+    partType: Leg
+    symmetry: Right
+  - type: ContainerContainer
+    containers:
+      'body_part_slot_right foot': !type:Container
+        ents: []
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: Sprite
     state: r_leg
   - type: VisualOrgan
@@ -204,6 +311,16 @@
   components:
   - type: Organ
     category: FootLeft
+  - type: BaseLayerId
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+    partType: Foot
+    symmetry: Left
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: Sprite
     state: l_foot
   - type: VisualOrgan
@@ -223,6 +340,16 @@
   components:
   - type: Organ
     category: FootRight
+  - type: BaseLayerId
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+    partType: Foot
+    symmetry: Right
+  - type: UserInterface
+    interfaces:
+      enum.SurgeryUIKey.Key:
+        type: SurgeryBui
   - type: Sprite
     state: r_foot
   - type: VisualOrgan

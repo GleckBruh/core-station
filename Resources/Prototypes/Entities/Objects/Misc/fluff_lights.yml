@@ -53,6 +53,8 @@
     canCollide: false
   - type: StealTarget
     stealGroup: LAMP
+  - type: DarknessProtectionSource # RedShooter - Мрак
+    radius: 2.5
 
 - type: entity
   name: lamp
@@ -253,6 +255,8 @@
     materialComposition:
       Glass: 500
       Steel: 200
+  - type: DarknessProtectionSource # RedShooter - Мрак
+    radius: 6.6
 
 - type: entity
   name: broken floodlight
