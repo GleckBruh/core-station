@@ -1,0 +1,44 @@
+- type: entity
+  id: CoreVehicleTestCar
+  name: testHMV
+  parent: BaseStructure
+  components:
+  - type: Sprite
+    sprite: _Core/CoreVehicle/humvee_transport.rsi
+    state: humvee_base
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.7,-0.7,0.7,0.7"
+        density: 100
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: CoreVehicleMover
+    maxForwardSpeed: 9
+    maxReverseSpeed: 3
+    acceleration: 5
+    reverseAcceleration: 3
+    brakeForce: 12
+    handbrakeForce: 18
+    rollingResistance: 1.2
+    steerResponse: 5
+    steerReturnSpeed: 7
+    steerPower: 2.8
+    angularResponse: 8
+    angularDamping: 5
+    grip: 10
+    driftGrip: 3.5
+    turnSpeedLoss: 0.8
+    handbrakeDriftForce: 4
+    handbrakeTurnMultiplier: 1.35
+    minSpeedForSteer: 0.4
+    speedForFullSteer: 5
+  - type: CoreVehicleInput

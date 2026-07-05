@@ -1,0 +1,29 @@
+﻿- type: entity
+  id: PortalGateDebugToPlanet
+  parent: BasePortal
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/gateway.rsi
+    layers:
+    - state: portal
+  - type: PointLight
+    radius: 3
+    energy: 1
+    netsync: false
+  - type: Portal
+  - type: LinkedEntity
+
+- type: entity
+  id: PortalGatePlanetToDebug
+  parent: BasePortal
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/gateway.rsi
+    layers:
+    - state: portal
+  - type: PointLight
+    radius: 3
+    energy: 1
+    netsync: false
+  - type: Portal
+  - type: LinkedEntity

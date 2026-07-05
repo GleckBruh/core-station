@@ -29,11 +29,22 @@ public sealed partial class SunShadowSystem : SharedSunShadowSystem
 
             var pausedTime = _metadata.GetPauseTime(uid);
 
-            var time = (float)(_timing.CurTime
+            // Core SunShadow Crush fix
+            var duration = cycle.Duration.TotalSeconds;
+
+            if (duration <= 0)
+                continue;
+
+            var totalSeconds = _timing.CurTime
                 .Add(cycle.Offset)
                 .Subtract(_ticker.RoundStartTimeSpan)
                 .Subtract(pausedTime)
-                .TotalSeconds % cycle.Duration.TotalSeconds);
+                .TotalSeconds;
+
+            var time = (float)(totalSeconds % duration);
+
+            if (time < 0f)
+                time += (float) duration;
 
             var (direction, alpha) = GetShadow((uid, cycle), time);
             shadow.Direction = direction;
@@ -42,51 +53,82 @@ public sealed partial class SunShadowSystem : SharedSunShadowSystem
     }
 
     [Pure]
-    public (Vector2 Direction, float Alpha) GetShadow(Entity<SunShadowCycleComponent> entity, float time)
+    public (Vector2 Direction, float Alpha) GetShadow(Entity<SunShadowCycleComponent> entity, float time) // Core SunShadow Crush fix
     {
-        // So essentially the values are stored as the percentages of the total duration just so it adjusts the speed
-        // dynamically and we don't have to manually handle it.
-        // It will lerp from each value to the next one with angle and length handled separately
-        var ratio = (float) (time / entity.Comp.Duration.TotalSeconds);
+        var directions = entity.Comp.Directions;
 
-        for (var i = entity.Comp.Directions.Count - 1; i >= 0; i--)
+        if (directions.Count == 0 || entity.Comp.Duration.TotalSeconds <= 0)
+            return (Vector2.Zero, 0f);
+
+        var ratio = (float)(time / entity.Comp.Duration.TotalSeconds);
+
+        ratio %= 1f;
+        if (ratio < 0f)
+            ratio += 1f;
+
+        for (var i = directions.Count - 1; i >= 0; i--)
         {
-            var dir = entity.Comp.Directions[i];
+            var dir = directions[i];
 
-            if (ratio > dir.Ratio)
+            if (ratio >= dir.Ratio)
             {
-                var next = entity.Comp.Directions[(i + 1) % entity.Comp.Directions.Count];
-                float nextRatio;
+                var next = directions[(i + 1) % directions.Count];
 
-                // Last entry
-                if (i == entity.Comp.Directions.Count - 1)
-                {
-                    nextRatio = next.Ratio + 1f;
-                }
-                else
-                {
-                    nextRatio = next.Ratio;
-                }
+                var currentRatio = dir.Ratio;
+                var nextRatio = i == directions.Count - 1
+                    ? next.Ratio + 1f
+                    : next.Ratio;
 
-                var range = nextRatio - dir.Ratio;
-                var diff = (ratio - dir.Ratio) / range;
-                DebugTools.Assert(diff is >= 0f and <= 1f);
+                var range = nextRatio - currentRatio;
 
-                // We lerp angle + length separately as we don't want a straight-line lerp and want the rotation to be consistent.
+                if (range <= 0f)
+                    return (dir.Direction, dir.Alpha);
+
+                var diff = (ratio - currentRatio) / range;
+                diff = Math.Clamp(diff, 0f, 1f);
+
                 var currentAngle = dir.Direction.ToAngle();
                 var nextAngle = next.Direction.ToAngle();
 
                 var angle = Angle.Lerp(currentAngle, nextAngle, diff);
-                // This is to avoid getting weird issues where the angle gets pretty close but length still noticeably catches up.
+
                 var lengthDiff = MathF.Pow(diff, 1f / 2f);
                 var length = float.Lerp(dir.Direction.Length(), next.Direction.Length(), lengthDiff);
 
                 var vector = angle.ToVec() * length;
                 var alpha = float.Lerp(dir.Alpha, next.Alpha, diff);
+
                 return (vector, alpha);
             }
         }
+        {
+            var last = directions[^1];
+            var first = directions[0];
 
-        throw new InvalidOperationException();
+            var currentRatio = last.Ratio;
+            var nextRatio = first.Ratio + 1f;
+            var wrappedRatio = ratio + 1f;
+
+            var range = nextRatio - currentRatio;
+
+            if (range <= 0f)
+                return (last.Direction, last.Alpha);
+
+            var diff = (wrappedRatio - currentRatio) / range;
+            diff = Math.Clamp(diff, 0f, 1f);
+
+            var currentAngle = last.Direction.ToAngle();
+            var nextAngle = first.Direction.ToAngle();
+
+            var angle = Angle.Lerp(currentAngle, nextAngle, diff);
+
+            var lengthDiff = MathF.Pow(diff, 1f / 2f);
+            var length = float.Lerp(last.Direction.Length(), first.Direction.Length(), lengthDiff);
+
+            var vector = angle.ToVec() * length;
+            var alpha = float.Lerp(last.Alpha, first.Alpha, diff);
+
+            return (vector, alpha);
+        }
     }
 }

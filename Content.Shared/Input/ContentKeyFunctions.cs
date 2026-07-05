@@ -64,6 +64,13 @@ namespace Content.Shared.Input
         public static readonly BoundKeyFunction ZoomOut = "ZoomOut";
         public static readonly BoundKeyFunction ZoomIn = "ZoomIn";
         public static readonly BoundKeyFunction ResetZoom = "ResetZoom";
+        public static readonly BoundKeyFunction TogglePosing = "TogglePosing"; // Core-ADT-Tweak
+        public static readonly BoundKeyFunction PosingOffsetLeft = "PosingOffsetLeft"; // Core-ADT-Tweak
+        public static readonly BoundKeyFunction PosingOffsetRight = "PosingOffsetRight"; // Core-ADT-Tweak
+        public static readonly BoundKeyFunction PosingOffsetUp = "PosingOffsetUp"; // Core-ADT-Tweak
+        public static readonly BoundKeyFunction PosingOffsetDown = "PosingOffsetDown"; // Core-ADT-Tweak
+        public static readonly BoundKeyFunction PosingRotateNegative = "PosingRotateNegative"; // Core-ADT-Tweak
+        public static readonly BoundKeyFunction PosingRotatePositive = "PosingRotatePositive"; // Core-ADT-Tweak
 
         public static readonly BoundKeyFunction ArcadeUp = "ArcadeUp";
         public static readonly BoundKeyFunction ArcadeDown = "ArcadeDown";

@@ -162,6 +162,7 @@
     - AnomalyHost
   # ADT-Core tweak start
   - type: SpeechBarks
+  - type: Posing
   # ADT-Core tweak end
 
 - type: entity
