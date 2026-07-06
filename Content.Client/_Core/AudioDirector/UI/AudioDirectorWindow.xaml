@@ -1,0 +1,13 @@
+﻿<DefaultWindow
+    xmlns="https://spacestation14.io"
+    Title="Audio Director"
+    SetWidth="700"
+    SetHeight="500">
+
+    <BoxContainer Orientation="Vertical">
+        <Label
+            Text="Audio Director is working!"
+            HorizontalAlignment="Center" />
+    </BoxContainer>
+
+</DefaultWindow>
