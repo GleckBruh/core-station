@@ -9,9 +9,10 @@ public sealed class AudioDirectorSystem : EntitySystem
 
     private int _nextGroupId = 1;
 
+    public event Action? StateChanged;
+
     public IReadOnlyCollection<AudioGroup> Groups =>
         _groups.Values;
-
 
     public AudioGroup CreateGroup(
         string name,
@@ -19,8 +20,16 @@ public sealed class AudioDirectorSystem : EntitySystem
     {
         var id = _nextGroupId;
         _nextGroupId++;
-        var group = new AudioGroup(id, name, target);
+
+        var group = new AudioGroup(
+            id,
+            name,
+            target);
+
         _groups.Add(id, group);
+
+        RaiseStateChanged();
+
         return group;
     }
 
@@ -33,15 +42,23 @@ public sealed class AudioDirectorSystem : EntitySystem
 
     public bool TryRemoveGroup(int id)
     {
-        return _groups.Remove(id);
+        if (!_groups.Remove(id))
+            return false;
+
+        RaiseStateChanged();
+        return true;
     }
 
-    public bool TryRenameGroup(int id, string name)
+    public bool TryRenameGroup(
+        int id,
+        string name)
     {
         if (!TryGetGroup(id, out var group))
             return false;
 
         group.Rename(name);
+
+        RaiseStateChanged();
         return true;
     }
 
@@ -53,6 +70,28 @@ public sealed class AudioDirectorSystem : EntitySystem
             return false;
 
         group.ChangeTarget(target);
+
+        RaiseStateChanged();
         return true;
+    }
+
+    public bool TryUpdateGroup(
+        int id,
+        string name,
+        AudioGroupTarget target)
+    {
+        if (!TryGetGroup(id, out var group))
+            return false;
+
+        group.Rename(name);
+        group.ChangeTarget(target);
+
+        RaiseStateChanged();
+        return true;
+    }
+
+    private void RaiseStateChanged()
+    {
+        StateChanged?.Invoke();
     }
 }

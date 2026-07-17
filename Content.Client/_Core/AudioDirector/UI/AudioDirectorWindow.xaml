@@ -5,9 +5,41 @@
     SetHeight="500">
 
     <BoxContainer Orientation="Vertical">
-        <Label
-            Text="Audio Director is working!"
-            HorizontalAlignment="Center" />
+
+        <BoxContainer
+            Orientation="Horizontal"
+            HorizontalExpand="True">
+
+            <Label
+                Text="Audio Groups"
+                HorizontalExpand="True"
+                VerticalAlignment="Center" />
+
+            <Button
+                Name="AddGroupButton"
+                Text="+"
+                MinWidth="40" />
+
+            <Button
+                Name="RemoveModeButton"
+                Text="-"
+                MinWidth="40"
+                Disabled="True" />
+
+        </BoxContainer>
+
+        <ScrollContainer
+            VerticalExpand="True"
+            HorizontalExpand="True">
+
+            <BoxContainer
+                Name="GroupsContainer"
+                Orientation="Vertical"
+                SeparationOverride="6"
+                HorizontalExpand="True" />
+
+        </ScrollContainer>
+
     </BoxContainer>
 
 </DefaultWindow>
