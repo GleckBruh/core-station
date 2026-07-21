@@ -58,12 +58,6 @@
         Name="ContentContainer"
         Orientation="Vertical"
         HorizontalExpand="True"
-        Visible="True">
-
-        <Label
-            Text="No tracks"
-            HorizontalAlignment="Center" />
-
-    </BoxContainer>
+        Visible="True" />
 
 </BoxContainer>

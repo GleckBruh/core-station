@@ -106,13 +106,28 @@ public sealed class AudioDirectorEui : BaseEui
             }
         }
 
+        var tracks = group.Tracks
+            .Select(track => new AudioTrackEuiData(
+                track.Id,
+                track.Name,
+                track.Path,
+                track.Volume,
+                track.Loop,
+                track.Paused,
+                track.Length,
+                _audioDirectorSystem.GetTrackPlaybackPosition(
+                    group.Id,
+                    track)))
+            .ToArray();
+
         return new AudioGroupEuiData(
             group.Id,
             group.Name,
             group.Target.Type,
             gridNetEntityId,
             mapId,
-            players);
+            players,
+            tracks);
     }
 
     public override void HandleMessage(EuiMessageBase msg)
@@ -147,6 +162,30 @@ public sealed class AudioDirectorEui : BaseEui
 
             case AudioDirectorEuiMsg.UpdatePlayersGroupRequest request:
                 TryUpdatePlayersGroup(request);
+                break;
+
+            case AudioDirectorEuiMsg.AddTrackRequest request:
+                TryAddTrack(request);
+                break;
+
+            case AudioDirectorEuiMsg.DeleteTrackRequest request:
+                TryDeleteTrack(request);
+                break;
+
+            case AudioDirectorEuiMsg.UpdateTrackRequest request:
+                TryUpdateTrack(request);
+                break;
+
+            case AudioDirectorEuiMsg.SetTrackPausedRequest request:
+                TrySetTrackPaused(request);
+                break;
+
+            case AudioDirectorEuiMsg.SetTrackTimeRequest request:
+                TrySetTrackTime(request);
+                break;
+
+            case AudioDirectorEuiMsg.FadeTrackRequest request:
+                TryFadeTrack(request);
                 break;
         }
     }
@@ -496,6 +535,169 @@ public sealed class AudioDirectorEui : BaseEui
         SendMessage(
             new AudioDirectorEuiMsg.OperationSuccess(
                 AudioDirectorEuiMsg.AudioDirectorOperation.UpdateGroup));
+    }
+
+    private void TryAddTrack(
+        AudioDirectorEuiMsg.AddTrackRequest request)
+    {
+        var name = request.Name.Trim();
+        var path = request.Path.Trim();
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            SendMessage(
+                new AudioDirectorEuiMsg.OperationError(
+                    AudioDirectorEuiMsg.AudioDirectorOperation.AddTrack,
+                    "Track name cannot be empty."));
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            SendMessage(
+                new AudioDirectorEuiMsg.OperationError(
+                    AudioDirectorEuiMsg.AudioDirectorOperation.AddTrack,
+                    "Track path cannot be empty."));
+            return;
+        }
+
+        if (float.IsNaN(request.Volume)
+            || float.IsInfinity(request.Volume)
+            || request.Volume < 0f
+            || request.Volume > 1f)
+        {
+            SendMessage(
+                new AudioDirectorEuiMsg.OperationError(
+                    AudioDirectorEuiMsg.AudioDirectorOperation.AddTrack,
+                    "Volume must be between 0 and 1."));
+            return;
+        }
+
+        if (!_audioDirectorSystem.TryAddTrack(
+                request.GroupId,
+                name,
+                path,
+                request.Volume,
+                request.Loop,
+                out _,
+                out var error))
+        {
+            SendMessage(
+                new AudioDirectorEuiMsg.OperationError(
+                    AudioDirectorEuiMsg.AudioDirectorOperation.AddTrack,
+                    error));
+            return;
+        }
+
+
+        SendMessage(
+            new AudioDirectorEuiMsg.OperationSuccess(
+                AudioDirectorEuiMsg.AudioDirectorOperation.AddTrack));
+    }
+
+    private void TryDeleteTrack(
+        AudioDirectorEuiMsg.DeleteTrackRequest request)
+    {
+        if (!_audioDirectorSystem.TryRemoveTrack(
+                request.GroupId,
+                request.TrackId))
+        {
+            SendMessage(
+                new AudioDirectorEuiMsg.OperationError(
+                    AudioDirectorEuiMsg.AudioDirectorOperation.DeleteTrack,
+                    "Track does not exist."));
+            return;
+        }
+
+        SendMessage(
+            new AudioDirectorEuiMsg.OperationSuccess(
+                AudioDirectorEuiMsg.AudioDirectorOperation.DeleteTrack));
+    }
+
+    private void TryUpdateTrack(
+        AudioDirectorEuiMsg.UpdateTrackRequest request)
+    {
+        if (!_audioDirectorSystem.TryUpdateTrack(
+                request.GroupId,
+                request.TrackId,
+                request.Volume,
+                request.Loop,
+                out var error))
+        {
+            SendMessage(
+                new AudioDirectorEuiMsg.OperationError(
+                    AudioDirectorEuiMsg.AudioDirectorOperation.UpdateTrack,
+                    error));
+            return;
+        }
+
+        SendMessage(
+            new AudioDirectorEuiMsg.OperationSuccess(
+                AudioDirectorEuiMsg.AudioDirectorOperation.UpdateTrack));
+    }
+
+    private void TrySetTrackPaused(
+        AudioDirectorEuiMsg.SetTrackPausedRequest request)
+    {
+        if (!_audioDirectorSystem.TrySetTrackPaused(
+                request.GroupId,
+                request.TrackId,
+                request.Paused,
+                out var error))
+        {
+            SendMessage(
+                new AudioDirectorEuiMsg.OperationError(
+                    AudioDirectorEuiMsg.AudioDirectorOperation.PauseTrack,
+                    error));
+            return;
+        }
+
+        SendMessage(
+            new AudioDirectorEuiMsg.OperationSuccess(
+                AudioDirectorEuiMsg.AudioDirectorOperation.PauseTrack));
+    }
+
+    private void TrySetTrackTime(
+        AudioDirectorEuiMsg.SetTrackTimeRequest request)
+    {
+        if (!_audioDirectorSystem.TrySetTrackTime(
+                request.GroupId,
+                request.TrackId,
+                request.Time,
+                out var error))
+        {
+            SendMessage(
+                new AudioDirectorEuiMsg.OperationError(
+                    AudioDirectorEuiMsg.AudioDirectorOperation.SetTrackTime,
+                    error));
+            return;
+        }
+
+        SendMessage(
+            new AudioDirectorEuiMsg.OperationSuccess(
+                AudioDirectorEuiMsg.AudioDirectorOperation.SetTrackTime));
+    }
+
+    private void TryFadeTrack(
+        AudioDirectorEuiMsg.FadeTrackRequest request)
+    {
+        if (!_audioDirectorSystem.TryFadeTrack(
+                request.GroupId,
+                request.TrackId,
+                request.Duration,
+                request.FadeIn,
+                out var error))
+        {
+            SendMessage(
+                new AudioDirectorEuiMsg.OperationError(
+                    AudioDirectorEuiMsg.AudioDirectorOperation.FadeTrack,
+                    error));
+            return;
+        }
+
+        SendMessage(
+            new AudioDirectorEuiMsg.OperationSuccess(
+                AudioDirectorEuiMsg.AudioDirectorOperation.FadeTrack));
     }
 
     private bool TryValidatePlayers(

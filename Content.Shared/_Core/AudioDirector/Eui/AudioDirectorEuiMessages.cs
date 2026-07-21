@@ -10,7 +10,53 @@ public static class AudioDirectorEuiMsg
     {
         CreateGroup,
         DeleteGroup,
-        UpdateGroup
+        UpdateGroup,
+        AddTrack,
+        DeleteTrack,
+        UpdateTrack,
+        PauseTrack,
+        RestartTrack,
+        SetTrackTime,
+        FadeTrack
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class SetTrackTimeRequest : EuiMessageBase
+    {
+        public int GroupId { get; }
+        public int TrackId { get; }
+        public float Time { get; }
+
+        public SetTrackTimeRequest(
+            int groupId,
+            int trackId,
+            float time)
+        {
+            GroupId = groupId;
+            TrackId = trackId;
+            Time = time;
+        }
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class FadeTrackRequest : EuiMessageBase
+    {
+        public int GroupId { get; }
+        public int TrackId { get; }
+        public float Duration { get; }
+        public bool FadeIn { get; }
+
+        public FadeTrackRequest(
+            int groupId,
+            int trackId,
+            float duration,
+            bool fadeIn)
+        {
+            GroupId = groupId;
+            TrackId = trackId;
+            Duration = duration;
+            FadeIn = fadeIn;
+        }
     }
 
     [Serializable, NetSerializable]
@@ -120,6 +166,99 @@ public static class AudioDirectorEuiMsg
         public DeleteGroupRequest(int groupId)
         {
             GroupId = groupId;
+        }
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class AddTrackRequest : EuiMessageBase
+    {
+        public int GroupId { get; }
+        public string Name { get; }
+        public string Path { get; }
+        public float Volume { get; }
+        public bool Loop { get; }
+
+        public AddTrackRequest(
+            int groupId,
+            string name,
+            string path,
+            float volume,
+            bool loop)
+        {
+            GroupId = groupId;
+            Name = name;
+            Path = path;
+            Volume = volume;
+            Loop = loop;
+        }
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class DeleteTrackRequest : EuiMessageBase
+    {
+        public int GroupId { get; }
+        public int TrackId { get; }
+
+        public DeleteTrackRequest(
+            int groupId,
+            int trackId)
+        {
+            GroupId = groupId;
+            TrackId = trackId;
+        }
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class UpdateTrackRequest : EuiMessageBase
+    {
+        public int GroupId { get; }
+        public int TrackId { get; }
+        public float Volume { get; }
+        public bool Loop { get; }
+
+        public UpdateTrackRequest(
+            int groupId,
+            int trackId,
+            float volume,
+            bool loop)
+        {
+            GroupId = groupId;
+            TrackId = trackId;
+            Volume = volume;
+            Loop = loop;
+        }
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class SetTrackPausedRequest : EuiMessageBase
+    {
+        public int GroupId { get; }
+        public int TrackId { get; }
+        public bool Paused { get; }
+
+        public SetTrackPausedRequest(
+            int groupId,
+            int trackId,
+            bool paused)
+        {
+            GroupId = groupId;
+            TrackId = trackId;
+            Paused = paused;
+        }
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class RestartTrackRequest : EuiMessageBase
+    {
+        public int GroupId { get; }
+        public int TrackId { get; }
+
+        public RestartTrackRequest(
+            int groupId,
+            int trackId)
+        {
+            GroupId = groupId;
+            TrackId = trackId;
         }
     }
 

@@ -15,6 +15,7 @@ public sealed partial class AudioDirectorEui : BaseEui
     private CreateAudioGroupWindow? _createGroupWindow;
     private DeleteAudioGroupWindow? _deleteGroupWindow;
     private EditAudioGroupWindow? _editGroupWindow;
+    private AddAudioTrackWindow? _addTrackWindow;
 
     private AudioGroupEuiData[] _groups = [];
     private AudioDirectorPlayerEuiData[] _players = [];
@@ -27,6 +28,12 @@ public sealed partial class AudioDirectorEui : BaseEui
         _window.OnAddGroupPressed += OpenCreateGroupWindow;
         _window.OnDeleteGroupPressed += OpenDeleteGroupConfirmation;
         _window.OnEditGroupPressed += OpenEditGroupWindow;
+        _window.OnAddTrackPressed += OpenAddTrackWindow;
+        _window.OnDeleteTrackPressed += SendDeleteTrackRequest;
+        _window.OnUpdateTrackPressed += SendUpdateTrackRequest;
+        _window.OnSetTrackPausedPressed += SendSetTrackPausedRequest;
+        _window.OnSetTrackTimePressed += SendSetTrackTimeRequest;
+        _window.OnFadeTrackPressed += SendFadeTrackRequest;
     }
 
     public override void Opened()
@@ -43,6 +50,12 @@ public sealed partial class AudioDirectorEui : BaseEui
         _window.OnAddGroupPressed -= OpenCreateGroupWindow;
         _window.OnDeleteGroupPressed -= OpenDeleteGroupConfirmation;
         _window.OnEditGroupPressed -= OpenEditGroupWindow;
+        _window.OnAddTrackPressed -= OpenAddTrackWindow;
+        _window.OnDeleteTrackPressed -= SendDeleteTrackRequest;
+        _window.OnUpdateTrackPressed -= SendUpdateTrackRequest;
+        _window.OnSetTrackPausedPressed -= SendSetTrackPausedRequest;
+        _window.OnSetTrackTimePressed -= SendSetTrackTimeRequest;
+        _window.OnFadeTrackPressed -= SendFadeTrackRequest;
 
         _window.Close();
     }
@@ -104,6 +117,33 @@ public sealed partial class AudioDirectorEui : BaseEui
             _editGroupWindow = null;
 
         _editGroupWindow.OpenCentered();
+    }
+
+    private void OpenAddTrackWindow(int groupId)
+    {
+        var group = _groups.FirstOrDefault(
+            group => group.Id == groupId);
+
+        if (group == null)
+            return;
+
+        if (_addTrackWindow != null)
+        {
+            _addTrackWindow.Close();
+            _addTrackWindow = null;
+        }
+
+        _addTrackWindow = new AddAudioTrackWindow(
+            group.Id,
+            group.Name);
+
+        _addTrackWindow.OnAddTrackRequested +=
+            SendAddTrackRequest;
+
+        _addTrackWindow.OnClose += () =>
+            _addTrackWindow = null;
+
+        _addTrackWindow.OpenCentered();
     }
 
     private void OpenDeleteGroupConfirmation(int groupId)
@@ -199,6 +239,94 @@ public sealed partial class AudioDirectorEui : BaseEui
                 players));
     }
 
+    private void SendAddTrackRequest(
+        int groupId,
+        string name,
+        string path,
+        float volume,
+        bool loop)
+    {
+        SendMessage(
+            new AudioDirectorEuiMsg.AddTrackRequest(
+                groupId,
+                name,
+                path,
+                volume,
+                loop));
+    }
+
+    private void SendSetTrackTimeRequest(
+        int groupId,
+        int trackId,
+        float time)
+    {
+        SendMessage(
+            new AudioDirectorEuiMsg.SetTrackTimeRequest(
+                groupId,
+                trackId,
+                time));
+    }
+
+    private void SendFadeTrackRequest(
+        int groupId,
+        int trackId,
+        float duration,
+        bool fadeIn)
+    {
+        SendMessage(
+            new AudioDirectorEuiMsg.FadeTrackRequest(
+                groupId,
+                trackId,
+                duration,
+                fadeIn));
+    }
+
+    private void SendDeleteTrackRequest(
+        int groupId,
+        int trackId)
+    {
+        SendMessage(
+            new AudioDirectorEuiMsg.DeleteTrackRequest(
+                groupId,
+                trackId));
+    }
+
+    private void SendUpdateTrackRequest(
+        int groupId,
+        int trackId,
+        float volume,
+        bool loop)
+    {
+        SendMessage(
+            new AudioDirectorEuiMsg.UpdateTrackRequest(
+                groupId,
+                trackId,
+                volume,
+                loop));
+    }
+
+    private void SendSetTrackPausedRequest(
+        int groupId,
+        int trackId,
+        bool paused)
+    {
+        SendMessage(
+            new AudioDirectorEuiMsg.SetTrackPausedRequest(
+                groupId,
+                trackId,
+                paused));
+    }
+
+    private void SendRestartTrackRequest(
+        int groupId,
+        int trackId)
+    {
+        SendMessage(
+            new AudioDirectorEuiMsg.RestartTrackRequest(
+                groupId,
+                trackId));
+    }
+
     private void SendDeleteGroupRequest(int groupId)
     {
         SendMessage(
@@ -258,6 +386,19 @@ public sealed partial class AudioDirectorEui : BaseEui
             case AudioDirectorEuiMsg.AudioDirectorOperation.UpdateGroup:
                 _editGroupWindow?.Close();
                 break;
+
+            case AudioDirectorEuiMsg.AudioDirectorOperation.AddTrack:
+                _addTrackWindow?.Close();
+                break;
+
+            case AudioDirectorEuiMsg.AudioDirectorOperation.SetTrackTime:
+                break;
+
+            case AudioDirectorEuiMsg.AudioDirectorOperation.DeleteTrack:
+            case AudioDirectorEuiMsg.AudioDirectorOperation.UpdateTrack:
+            case AudioDirectorEuiMsg.AudioDirectorOperation.PauseTrack:
+            case AudioDirectorEuiMsg.AudioDirectorOperation.FadeTrack:
+                break;
         }
     }
 
@@ -275,6 +416,19 @@ public sealed partial class AudioDirectorEui : BaseEui
 
             case AudioDirectorEuiMsg.AudioDirectorOperation.UpdateGroup:
                 _editGroupWindow?.ShowError(error.Error);
+                break;
+
+            case AudioDirectorEuiMsg.AudioDirectorOperation.AddTrack:
+                _addTrackWindow?.ShowError(error.Error);
+                break;
+
+            case AudioDirectorEuiMsg.AudioDirectorOperation.SetTrackTime:
+                break;
+
+            case AudioDirectorEuiMsg.AudioDirectorOperation.DeleteTrack:
+            case AudioDirectorEuiMsg.AudioDirectorOperation.UpdateTrack:
+            case AudioDirectorEuiMsg.AudioDirectorOperation.PauseTrack:
+            case AudioDirectorEuiMsg.AudioDirectorOperation.FadeTrack:
                 break;
         }
     }

@@ -12,18 +12,24 @@ public sealed class AudioTrack
 
     public bool Loop { get; private set; }
 
+    public bool Paused { get; private set; }
+
+    public float Length { get; }
+
     public AudioTrack(
         int id,
         string name,
         string path,
         float volume,
-        bool loop)
+        bool loop,
+        float length)
     {
         Id = id;
         Name = name;
         Path = path;
         Volume = volume;
         Loop = loop;
+        Length = length;
     }
 
     internal void Rename(string name)
@@ -44,5 +50,10 @@ public sealed class AudioTrack
     internal void ChangeLoop(bool loop)
     {
         Loop = loop;
+    }
+
+    internal void SetPaused(bool paused)
+    {
+        Paused = paused;
     }
 }

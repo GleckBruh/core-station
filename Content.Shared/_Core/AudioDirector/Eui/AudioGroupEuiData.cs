@@ -13,6 +13,7 @@ public sealed class AudioGroupEuiData
     public string? GridNetEntityId { get; }
     public string? MapId { get; }
     public NetUserId[] Players { get; }
+    public AudioTrackEuiData[] Tracks { get; }
 
     public AudioGroupEuiData(
         int id,
@@ -20,7 +21,8 @@ public sealed class AudioGroupEuiData
         AudioGroupTargetType targetType,
         string? gridNetEntityId = null,
         string? mapId = null,
-        NetUserId[]? players = null)
+        NetUserId[]? players = null,
+        AudioTrackEuiData[]? tracks = null)
     {
         Id = id;
         Name = name;
@@ -28,5 +30,6 @@ public sealed class AudioGroupEuiData
         GridNetEntityId = gridNetEntityId;
         MapId = mapId;
         Players = players ?? [];
+        Tracks = tracks ?? [];
     }
 }
